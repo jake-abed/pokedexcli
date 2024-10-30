@@ -10,10 +10,17 @@ import (
 type cliCommand struct {
   name string
   description string
-  callback func() error
+  callback func(*commandConfig) error
 }
 
-func buildCommands() map[string]cliCommand {
+type commandConfig struct {
+  Next *string
+  Previous *string
+}
+
+func buildCommands() (map[string]cliCommand, commandConfig) {
+  config := commandConfig{}
+
   commands := map[string]cliCommand{
     "help": {
       name: "help",
@@ -25,13 +32,23 @@ func buildCommands() map[string]cliCommand {
       description: "Exit the Pokedex",
       callback: commandExit,
     },
+    "map": {
+      name: "map",
+      description: "Displays the next 20 locations.",
+      callback: commandMap,
+    },
+    "mapb": {
+      name: "mapb",
+      description: "Displays the previous 20 locations.",
+      callback: commandMapB,
+    },
   }
-  return commands
+  return commands, config 
 }
 
 func runCli() {
   running := true
-  commands := buildCommands()
+  commands, config := buildCommands()
 
 
   fmt.Println("Pokedex booting up...")
@@ -49,10 +66,10 @@ func runCli() {
       if ok {
         switch command.name {
         case "exit":
-          command.callback()
+          command.callback(&config)
           running = false
         default:
-          command.callback()
+          command.callback(&config)
         }
       } else {
         fmt.Println("Command not found! Please enter 'help' for aid.")
