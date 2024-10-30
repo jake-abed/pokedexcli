@@ -4,7 +4,9 @@ import (
   "os"
   "bufio"
   "fmt"
+  "time"
   "strings"
+  "github.com/jake-abed/pokedexcli/internal/pokeapi"
 )
 
 type cliCommand struct {
@@ -14,12 +16,17 @@ type cliCommand struct {
 }
 
 type commandConfig struct {
+  pokeapiClient pokeapi.Client
   Next *string
   Previous *string
 }
 
-func buildCommands() (map[string]cliCommand, commandConfig) {
-  config := commandConfig{}
+func buildCommands() (map[string]cliCommand, *commandConfig) {
+  
+  pokeClient := pokeapi.NewClient(5 * time.Second)
+  config := &commandConfig{
+    pokeapiClient: pokeClient,
+  }
 
   commands := map[string]cliCommand{
     "help": {
@@ -43,7 +50,7 @@ func buildCommands() (map[string]cliCommand, commandConfig) {
       callback: commandMapB,
     },
   }
-  return commands, config 
+  return commands, config
 }
 
 func runCli() {
@@ -66,10 +73,16 @@ func runCli() {
       if ok {
         switch command.name {
         case "exit":
-          command.callback(&config)
+          err := command.callback(config)
+          if err != nil {
+            fmt.Println(err)
+          }
           running = false
         default:
-          command.callback(&config)
+          err := command.callback(config)
+          if err != nil {
+            fmt.Println(err)
+          }
         }
       } else {
         fmt.Println("Command not found! Please enter 'help' for aid.")
