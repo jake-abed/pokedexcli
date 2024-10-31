@@ -5,6 +5,7 @@ import (
   "encoding/json"
   "io"
   "errors"
+  "fmt"
 )
 
 
@@ -14,8 +15,7 @@ func (c *Client) ListPokemonInLocation(location *string) ([]PokemonEncounters, e
     return nil, errors.New("A location must be provided.")
   }
 
-  url := baseURL + "/" + *location
-
+  url := baseURL + "/location-area/" + *location
   req, err := http.NewRequest("GET", url, nil)
   if err != nil {
     return nil, err
@@ -37,6 +37,7 @@ func (c *Client) ListPokemonInLocation(location *string) ([]PokemonEncounters, e
   if err != nil {
     return nil, err
   }
+  fmt.Println(locationAreaData.PokemonEncounters)
 
   return locationAreaData.PokemonEncounters, nil
 }

@@ -7,10 +7,11 @@ import (
 func commandExplore(c *commandConfig) error {
   pokemonEncounters, err := c.pokeapiClient.ListPokemonInLocation(c.Location)
   if err != nil {
+    fmt.Println("Error from PokeClient...")
     return err
   }
 
-  fmt.Println(fmt.Sprintf("Exploring %v...", c.Location))
+  fmt.Println(fmt.Sprintf("Exploring %v...", *c.Location))
   for _, encounter := range pokemonEncounters {
     name := encounter.Pokemon.Name
     fmt.Println(fmt.Sprintf(" - %v", name))

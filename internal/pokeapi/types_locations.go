@@ -40,7 +40,7 @@ type RespLocationAreaData struct {
 		} `json:"language"`
 		Name string `json:"name"`
 	} `json:"names"`
-	PokemonEncounters []PokemonEncounters `json:"pokemon-encounters"`
+	PokemonEncounters []PokemonEncounters `json:"pokemon_encounters"`
 }
 
 type PokemonEncounters struct {
