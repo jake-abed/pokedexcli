@@ -7,6 +7,7 @@ import (
   "time"
   "strings"
   "github.com/jake-abed/pokedexcli/internal/pokeapi"
+  "github.com/jake-abed/pokedexcli/internal/pokecache"
 )
 
 type cliCommand struct {
@@ -22,8 +23,8 @@ type commandConfig struct {
 }
 
 func buildCommands() (map[string]cliCommand, *commandConfig) {
-  
-  pokeClient := pokeapi.NewClient(5 * time.Second)
+  cache := pokecache.NewCache(time.Second * 60)
+  pokeClient := pokeapi.NewClient(5 * time.Second, &cache)
   config := &commandConfig{
     pokeapiClient: pokeClient,
   }
