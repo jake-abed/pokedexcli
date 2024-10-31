@@ -39,6 +39,18 @@ func TestAddGet(t *testing.T) {
 	}
 }
 
+func TestGetNotOk(t *testing.T) {
+  const interval = 5 * time.Second
+  t.Run(fmt.Sprintf("Test case not in cache"), func (t * testing.T) {
+    cache := NewCache(interval)
+    _, ok := cache.Get("falseKey")
+    if ok {
+      t.Errorf("expected key to not exist")
+      return
+    }
+  })
+}
+
 func TestReapLoop(t *testing.T) {
 	const baseTime = 5 * time.Millisecond
 	const waitTime = baseTime + 10*time.Millisecond
@@ -58,5 +70,19 @@ func TestReapLoop(t *testing.T) {
 		t.Errorf("expected to not find key")
 		return
 	}
+
+  cache.Add("https://genya.games/", []byte("games"))
+  _, ok = cache.Get("https://genya.games/")
+  if !ok {
+    t.Errorf("expected to find key")
+    return
+  }
+
+  time.Sleep(waitTime)
+  _, ok = cache.Get("https://genya.games/")
+  if ok {
+    t.Errorf("expected to not find key")
+    return
+  }
 }
 

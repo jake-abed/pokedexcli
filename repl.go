@@ -20,6 +20,7 @@ type commandConfig struct {
   pokeapiClient pokeapi.Client
   Next *string
   Previous *string
+  Location *string
 }
 
 func buildCommands() (map[string]cliCommand, *commandConfig) {
@@ -49,6 +50,11 @@ func buildCommands() (map[string]cliCommand, *commandConfig) {
       name: "mapb",
       description: "Displays the previous 20 locations.",
       callback: commandMapB,
+    },
+    "explore": {
+      name: "explore",
+      description: "Explores a given map location and shows possible pokemon.",
+      callback: commandExplore,
     },
   }
   return commands, config
@@ -89,6 +95,16 @@ func runCli() {
             fmt.Println(err)
           }
           running = false
+        case "explore":
+          if len(input) < 2 {
+            fmt.Println("Explore requires a location! Please try again.")
+            continue
+          }
+          config.Location = &input[1]
+          err := command.callback(config)
+          if err != nil {
+            fmt.Println(err)
+          }
         default:
           err := command.callback(config)
           if err != nil {
