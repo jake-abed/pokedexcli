@@ -54,6 +54,12 @@ func buildCommands() (map[string]cliCommand, *commandConfig) {
   return commands, config
 }
 
+func cleanInput(text string) []string {
+  output := strings.ToLower(text)
+  words := strings.Fields(output)
+  return words
+}
+
 func runCli() {
   running := true
   commands, config := buildCommands()
@@ -70,7 +76,11 @@ func runCli() {
 
     scan := scanner.Scan()
     if scan {
-      command, ok := commands[strings.ToLower(scanner.Text())]
+      input := cleanInput(scanner.Text())
+      if len(input) == 0 {
+        continue
+      }
+      command, ok := commands[input[0]]
       if ok {
         switch command.name {
         case "exit":
