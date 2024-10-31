@@ -11,7 +11,7 @@ func NewCache(interval time.Duration) Cache {
     mu: &sync.Mutex{},
   }
 
-  cache.reapLoop(interval)
+  go cache.reapLoop(interval)
 
   return cache
 }
@@ -42,7 +42,7 @@ func (c *Cache) Get(key string) ([]byte, bool) {
 func (c *Cache) reapLoop(interval time.Duration) {
   ticker := time.NewTicker(interval)
   defer ticker.Stop()
-  go func() {
+  func() {
     for range ticker.C {
       c.reap(time.Now(), interval)
     }
@@ -58,3 +58,4 @@ func (c *Cache) reap(now time.Time, last time.Duration) {
     }
   }
 }
+
