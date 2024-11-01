@@ -9,7 +9,7 @@ func commandHelp(_ *commandConfig) error {
   fmt.Println("How to use the Pokedex:")
   for _, v := range commands {
     fmt.Println("---")
-    fmt.Println(fmt.Sprintf("%v <=> %v", v.name, v.description))
+    fmt.Println(fmt.Sprintf("%-8v <=>   %v", v.name, v.description))
   }
   fmt.Println("---")
   fmt.Println("If more help is required, please visit a PokeCenter!")

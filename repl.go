@@ -33,12 +33,12 @@ func buildCommands() (map[string]cliCommand, *commandConfig) {
   commands := map[string]cliCommand{
     "help": {
       name: "help",
-      description: "Displays a help message",
+      description: "Displays a help message.",
       callback: commandHelp,
     },
     "exit": {
       name: "exit",
-      description: "Exit the Pokedex",
+      description: "Exit the Pokedex.",
       callback: commandExit,
     },
     "map": {
@@ -53,7 +53,7 @@ func buildCommands() (map[string]cliCommand, *commandConfig) {
     },
     "explore": {
       name: "explore",
-      description: "Explores a given map location and shows possible pokemon.",
+      description: "Explores a map location and possible pokemon encounters.",
       callback: commandExplore,
     },
   }

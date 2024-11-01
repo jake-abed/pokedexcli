@@ -13,8 +13,8 @@ func (c *Client) ListLocations(pageURL *string) (RespPokeLocations, error) {
 		url = *pageURL
 	}
 
-  cachedRes, found := c.cache.Get(url)
-  if found {
+  cachedRes, ok := c.cache.Get(url)
+  if ok {
     locations := RespPokeLocations{}
     err := json.Unmarshal(cachedRes, &locations)
     if err != nil {
