@@ -21,6 +21,7 @@ type commandConfig struct {
   Next *string
   Previous *string
   Location *string
+  Pokemon *string
 }
 
 func buildCommands() (map[string]cliCommand, *commandConfig) {
@@ -55,6 +56,11 @@ func buildCommands() (map[string]cliCommand, *commandConfig) {
       name: "explore",
       description: "Explores a map location and possible pokemon encounters.",
       callback: commandExplore,
+    },
+    "catch": {
+      name: "catch",
+      description: "Attempt to catch a specific pokemon by name.",
+      callback: commandCatch,
     },
   }
   return commands, config
@@ -101,6 +107,16 @@ func runCli() {
             continue
           }
           config.Location = &input[1]
+          err := command.callback(config)
+          if err != nil {
+            fmt.Println(err)
+          }
+        case "catch":
+          if len(input) < 2 {
+            fmt.Println("Catch requires a pokemon name! Please try again.")
+            continue
+          }
+          config.Pokemon = &input[1]
           err := command.callback(config)
           if err != nil {
             fmt.Println(err)
