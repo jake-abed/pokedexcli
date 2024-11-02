@@ -64,6 +64,11 @@ func buildCommands() (map[string]cliCommand, *commandConfig) {
       description: "Attempt to catch a specific pokemon by name.",
       callback: commandCatch,
     },
+    "inspect": {
+      name: "inspect",
+      description: "Inspect a pokemon in your PokeBank.",
+      callback: commandInspect,
+    },
   }
   return commands, config
 }
@@ -116,6 +121,16 @@ func runCli() {
         case "catch":
           if len(input) < 2 {
             fmt.Println("Catch requires a pokemon name! Please try again.")
+            continue
+          }
+          config.Pokemon = &input[1]
+          err := command.callback(config)
+          if err != nil {
+            fmt.Println(err)
+          }
+        case "inspect":
+          if len(input) < 2 {
+            fmt.Println("Inspect requires a pokemon name! Please try again.")
             continue
           }
           config.Pokemon = &input[1]
