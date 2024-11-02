@@ -18,6 +18,7 @@ type cliCommand struct {
 
 type commandConfig struct {
   pokeapiClient pokeapi.Client
+  pokeBank map[string]pokeapi.PokemonData
   Next *string
   Previous *string
   Location *string
@@ -29,6 +30,7 @@ func buildCommands() (map[string]cliCommand, *commandConfig) {
   pokeClient := pokeapi.NewClient(5 * time.Second, &cache)
   config := &commandConfig{
     pokeapiClient: pokeClient,
+    pokeBank: make(map[string]pokeapi.PokemonData),
   }
 
   commands := map[string]cliCommand{

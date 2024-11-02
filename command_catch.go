@@ -31,6 +31,7 @@ func commandCatch(c *commandConfig) error {
   time.Sleep(500 * time.Millisecond)
   fmt.Print(".\n")
   if throw >= baseXp {
+    c.pokeBank[pokeData.Name] = pokeData
     msg := fmt.Sprintf("Awesome! You caught %v!", name)
     fmt.Println(msg)
     return nil
