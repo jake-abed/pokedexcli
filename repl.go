@@ -56,18 +56,23 @@ func buildCommands() (map[string]cliCommand, *commandConfig) {
     },
     "explore": {
       name: "explore",
-      description: "Explores a map location and possible pokemon encounters.",
+      description: "Explores a map location and possible Pokemon encounters.",
       callback: commandExplore,
     },
     "catch": {
       name: "catch",
-      description: "Attempt to catch a specific pokemon by name.",
+      description: "Attempt to catch a specific Pokemon by name.",
       callback: commandCatch,
     },
     "inspect": {
       name: "inspect",
-      description: "Inspect a pokemon in your PokeBank.",
+      description: "Inspect a Pokemon in your PokeBank.",
       callback: commandInspect,
+    },
+    "pokedex": {
+      name: "pokedex",
+      description: "View all Pokemon caught so far.",
+      callback: commandPokedex,
     },
   }
   return commands, config
