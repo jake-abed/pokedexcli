@@ -25,14 +25,16 @@ type commandConfig struct {
   Pokemon *string
 }
 
-func buildCommands() (map[string]cliCommand, *commandConfig) {
-  cache := pokecache.NewCache(time.Second * 60)
-  pokeClient := pokeapi.NewClient(5 * time.Second, &cache)
-  config := &commandConfig{
+func buildConfig(cacheTime, clientTime time.Duration) (*commandConfig) {
+  cache := pokecache.NewCache(time.Second * cacheTime)
+  pokeClient := pokeapi.NewClient(time.Second * clientTime, &cache)
+  return &commandConfig{
     pokeapiClient: pokeClient,
     pokeBank: make(map[string]pokeapi.PokemonData),
   }
+}
 
+func buildCommands() (map[string]cliCommand) {
   commands := map[string]cliCommand{
     "help": {
       name: "help",
@@ -75,7 +77,7 @@ func buildCommands() (map[string]cliCommand, *commandConfig) {
       callback: commandPokedex,
     },
   }
-  return commands, config
+  return commands
 }
 
 func cleanInput(text string) []string {
@@ -86,19 +88,17 @@ func cleanInput(text string) []string {
 
 func runCli() {
   running := true
-  commands, config := buildCommands()
-
+  commands := buildCommands()
+  config := buildConfig(300, 5)
 
   fmt.Println("Pokedex booting up...")
   fmt.Println("Success! Welcome to the Pokedex :)")
 
-  for running {
-    
-  scanner := bufio.NewScanner(os.Stdin)
-
+  for running { 
+    scanner := bufio.NewScanner(os.Stdin)
     fmt.Print("Pokedex > ")
-
     scan := scanner.Scan()
+
     if scan {
       input := cleanInput(scanner.Text())
       if len(input) == 0 {
@@ -106,53 +106,42 @@ func runCli() {
       }
       command, ok := commands[input[0]]
       if ok {
-        switch command.name {
-        case "exit":
-          err := command.callback(config)
-          if err != nil {
-            fmt.Println(err)
-          }
-          running = false
+        switch command.name { 
         case "explore":
           if len(input) < 2 {
             fmt.Println("Explore requires a location! Please try again.")
             continue
           }
           config.Location = &input[1]
-          err := command.callback(config)
-          if err != nil {
-            fmt.Println(err)
-          }
+          command.execute(config)
         case "catch":
           if len(input) < 2 {
             fmt.Println("Catch requires a pokemon name! Please try again.")
             continue
           }
           config.Pokemon = &input[1]
-          err := command.callback(config)
-          if err != nil {
-            fmt.Println(err)
-          }
+          command.execute(config)
         case "inspect":
           if len(input) < 2 {
             fmt.Println("Inspect requires a pokemon name! Please try again.")
             continue
           }
           config.Pokemon = &input[1]
-          err := command.callback(config)
-          if err != nil {
-            fmt.Println(err)
-          }
+          command.execute(config)
         default:
-          err := command.callback(config)
-          if err != nil {
-            fmt.Println(err)
-          }
+          command.execute(config)
         }
       } else {
         fmt.Println("Command not found! Please enter 'help' for aid.")
       }
     }
+  }
+}
+
+func (c *cliCommand) execute(cfg *commandConfig) {
+  err := c.callback(cfg)
+  if err != nil {
+    fmt.Println(err)
   }
 }
 

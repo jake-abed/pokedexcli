@@ -3,7 +3,7 @@ package main
 import "fmt"
 
 func commandHelp(_ *commandConfig) error {
-  commands, _ := buildCommands()
+  commands := buildCommands()
   fmt.Println("Welcome to this Pokedex!")
   fmt.Println("/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\")
   fmt.Println("How to use the Pokedex:")
