@@ -1,9 +1,9 @@
 package pokecache
 
 import (
-  "testing"
-  "fmt"
-  "time"
+	"fmt"
+	"testing"
+	"time"
 )
 
 func TestAddGet(t *testing.T) {
@@ -40,15 +40,15 @@ func TestAddGet(t *testing.T) {
 }
 
 func TestGetNotOk(t *testing.T) {
-  const interval = 5 * time.Second
-  t.Run(fmt.Sprintf("Test case not in cache"), func (t * testing.T) {
-    cache := NewCache(interval)
-    _, ok := cache.Get("falseKey")
-    if ok {
-      t.Errorf("expected key to not exist")
-      return
-    }
-  })
+	const interval = 5 * time.Second
+	t.Run(fmt.Sprintf("Test case not in cache"), func(t *testing.T) {
+		cache := NewCache(interval)
+		_, ok := cache.Get("falseKey")
+		if ok {
+			t.Errorf("expected key to not exist")
+			return
+		}
+	})
 }
 
 func TestReapLoop(t *testing.T) {
@@ -71,18 +71,17 @@ func TestReapLoop(t *testing.T) {
 		return
 	}
 
-  cache.Add("https://genya.games/", []byte("games"))
-  _, ok = cache.Get("https://genya.games/")
-  if !ok {
-    t.Errorf("expected to find key")
-    return
-  }
+	cache.Add("https://genya.games/", []byte("games"))
+	_, ok = cache.Get("https://genya.games/")
+	if !ok {
+		t.Errorf("expected to find key")
+		return
+	}
 
-  time.Sleep(waitTime)
-  _, ok = cache.Get("https://genya.games/")
-  if ok {
-    t.Errorf("expected to not find key")
-    return
-  }
+	time.Sleep(waitTime)
+	_, ok = cache.Get("https://genya.games/")
+	if ok {
+		t.Errorf("expected to not find key")
+		return
+	}
 }
-

@@ -1,17 +1,16 @@
 package pokecache
 
 import (
-  "time"
-  "sync"
+	"sync"
+	"time"
 )
 
 type cacheEntry struct {
-  createdAt time.Time
-  val []byte
+	createdAt time.Time
+	val       []byte
 }
 
 type Cache struct {
-  entries map[string]cacheEntry
-  mu *sync.Mutex
+	entries map[string]cacheEntry
+	mu      *sync.Mutex
 }
-

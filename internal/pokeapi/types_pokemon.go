@@ -270,4 +270,3 @@ type PokemonData struct {
 	} `json:"types"`
 	Weight int `json:"weight"`
 }
-
